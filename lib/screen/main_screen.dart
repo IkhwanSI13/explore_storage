@@ -19,7 +19,9 @@ class _MainScreenState extends State<MainScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              context.go('/example');
+            },
             child: const Text("Shared Preferences"),
           ),
           ElevatedButton(
