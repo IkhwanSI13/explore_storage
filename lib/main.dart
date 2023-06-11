@@ -1,3 +1,4 @@
+import 'package:explore_storage/screen/students_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,14 +16,14 @@ final GoRouter _router = GoRouter(
       builder: (BuildContext context, GoRouterState state) {
         return const MainScreen();
       },
-      // routes: <RouteBase>[
-      //   GoRoute(
-      //     path: 'details',
-      //     builder: (BuildContext context, GoRouterState state) {
-      //       return const DetailsScreen();
-      //     },
-      //   ),
-      // ],
+      routes: <RouteBase>[
+        GoRoute(
+          path: 'students',
+          builder: (BuildContext context, GoRouterState state) {
+            return const StudentsScreen();
+          },
+        ),
+      ],
     ),
   ],
 );

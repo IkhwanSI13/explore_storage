@@ -1,7 +1,5 @@
-import 'package:explore_storage/repository/local/sqflite.dart';
 import 'package:flutter/material.dart';
-
-import '../models/student_model.dart';
+import 'package:go_router/go_router.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -11,147 +9,27 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final keyFormStudent = GlobalKey<FormState>();
-
-  TextEditingController controllerId = TextEditingController();
-  TextEditingController controllerName = TextEditingController();
-  TextEditingController controllerDepartment = TextEditingController();
-  TextEditingController controllerSks = TextEditingController();
-
-  String id = "";
-  String name = "";
-  String department = "";
-  int sks = 0;
-
-  List<StudentModel> students = [];
-
-  @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      students = await MySQFLite.instance.getStudents();
-      setState(() {});
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Explore SQFLite"),
+        title: const Text("Explore Local Storage"),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
-            margin: const EdgeInsets.only(top: 36, left: 24, bottom: 4),
-            child: const Text(
-              "Input Mahasiswa",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+          ElevatedButton(
+            onPressed: () {},
+            child: const Text("Shared Preferences"),
           ),
-          Form(
-            key: keyFormStudent,
-            child: Container(
-              margin: const EdgeInsets.only(left: 24, right: 24),
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: controllerId,
-                    decoration: const InputDecoration(hintText: "ID"),
-                    validator: (value) => _onValidateText(value),
-                    keyboardType: TextInputType.number,
-                    onSaved: (value) => id = value.toString(),
-                  ),
-                  TextFormField(
-                    controller: controllerName,
-                    decoration: const InputDecoration(hintText: "Nama"),
-                    validator: (value) => _onValidateText(value),
-                    onSaved: (value) => name = value.toString(),
-                  ),
-                  TextFormField(
-                    controller: controllerDepartment,
-                    decoration: const InputDecoration(hintText: "Jurusan"),
-                    validator: (value) => _onValidateText(value),
-                    onSaved: (value) => department = value.toString(),
-                  ),
-                  TextFormField(
-                    controller: controllerSks,
-                    decoration: const InputDecoration(hintText: "SKS"),
-                    validator: (value) => _onValidateText(value),
-                    keyboardType: TextInputType.number,
-                    onSaved: (value) => sks = int.parse(value.toString()),
-                  ),
-                ],
-              ),
-            ),
+          ElevatedButton(
+            onPressed: () {
+              context.go('/students');
+            },
+            child: const Text("SQFLite"),
           ),
-          Container(
-            margin: const EdgeInsets.only(left: 24, right: 24),
-            child: ElevatedButton(
-              onPressed: _onSaveStudent,
-              child: const Text("Simpan"),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 24, left: 24, bottom: 4),
-            child: const Text("Data Mahasiswa",
-                style: TextStyle(fontWeight: FontWeight.bold)),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: students.length,
-              padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
-              itemBuilder: (BuildContext context, int index) {
-                var value = students[index];
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text("Id: ${value.id}"),
-                      Text("Name: ${value.name}"),
-                      Text("Department: ${value.department}"),
-                      Text("SKS: ${value.sks}"),
-                    ],
-                  ),
-                );
-              },
-            ),
-          )
         ],
       ),
     );
-  }
-
-  String? _onValidateText(String? value) {
-    if (value?.isEmpty ?? true) return 'Tidak boleh kosong';
-    return null;
-  }
-
-  _onSaveStudent() async {
-    FocusScope.of(context).requestFocus(FocusNode());
-
-    if (keyFormStudent.currentState?.validate() ?? false) {
-      keyFormStudent.currentState?.save();
-      controllerId.text = "";
-      controllerName.text = "";
-      controllerDepartment.text = "";
-      controllerSks.text = "";
-
-      await MySQFLite.instance.insertStudent(StudentModel(
-        id: id,
-        name: name,
-        department: department,
-        sks: sks,
-      ));
-
-      students = await MySQFLite.instance.getStudents();
-      setState(() {});
-    }
   }
 }
