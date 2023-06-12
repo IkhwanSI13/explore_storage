@@ -58,6 +58,17 @@ class MySQFLite {
     );
   }
 
+  Future<void> insertStudents(List<StudentModel> models) async {
+    Database db = await instance.database;
+
+    Batch batch = db.batch();
+    for (var model in models) {
+      batch.insert(tableStudent, model.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace);
+    }
+    await batch.commit(noResult: true);
+  }
+
   Future<List<StudentModel>> getStudents() async {
     Database db = await instance.database;
 
