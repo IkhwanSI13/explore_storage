@@ -12,7 +12,7 @@ class ExampleScreen extends StatefulWidget {
 class _ExampleScreenState extends State<ExampleScreen> {
   final MySharedPref _mySharedPref = MySharedPref();
 
-  String _value = "Kosong";
+  String _value = "Empty";
   final TextEditingController _inputController = TextEditingController();
 
   @override
@@ -31,7 +31,7 @@ class _ExampleScreenState extends State<ExampleScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             const Text(
-              "Simpan nilai",
+              "Save value",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 24,
@@ -50,12 +50,12 @@ class _ExampleScreenState extends State<ExampleScreen> {
                 _mySharedPref.setValue(_inputController.value.text);
                 _inputController.text = "";
               },
-              child: const Text("Simpan"),
+              child: const Text("Save"),
             ),
             Container(
               margin: const EdgeInsets.only(top: 32, bottom: 8),
               child: const Text(
-                "Ambil nilai",
+                "Get Value",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 24,
@@ -65,7 +65,7 @@ class _ExampleScreenState extends State<ExampleScreen> {
             Container(
               margin: const EdgeInsets.only(bottom: 8),
               child: Center(
-                child: Text("Nilai: $_value"),
+                child: Text("Value: $_value"),
               ),
             ),
             ElevatedButton(
@@ -76,7 +76,7 @@ class _ExampleScreenState extends State<ExampleScreen> {
                   });
                 });
               },
-              child: const Text("Ambil"),
+              child: const Text("Get"),
             )
           ],
         ),

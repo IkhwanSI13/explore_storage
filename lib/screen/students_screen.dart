@@ -47,7 +47,7 @@ class _StudentsScreenState extends State<StudentsScreen> {
           Container(
             margin: const EdgeInsets.only(top: 36, left: 24, bottom: 4),
             child: const Text(
-              "Input Mahasiswa",
+              "Input Student",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
@@ -74,7 +74,7 @@ class _StudentsScreenState extends State<StudentsScreen> {
                   ),
                   TextFormField(
                     controller: controllerDepartment,
-                    decoration: const InputDecoration(hintText: "Jurusan"),
+                    decoration: const InputDecoration(hintText: "Department"),
                     validator: (value) => _onValidateText(value),
                     onSaved: (value) => department = value.toString(),
                   ),
@@ -93,12 +93,12 @@ class _StudentsScreenState extends State<StudentsScreen> {
             margin: const EdgeInsets.only(left: 24, right: 24),
             child: ElevatedButton(
               onPressed: _onSaveStudent,
-              child: const Text("Simpan"),
+              child: const Text("Save"),
             ),
           ),
           Container(
             margin: const EdgeInsets.only(top: 24, left: 24, bottom: 4),
-            child: const Text("Data Mahasiswa",
+            child: const Text("Student Data",
                 style: TextStyle(fontWeight: FontWeight.bold)),
           ),
           Expanded(
@@ -129,7 +129,7 @@ class _StudentsScreenState extends State<StudentsScreen> {
   }
 
   String? _onValidateText(String? value) {
-    if (value?.isEmpty ?? true) return 'Tidak boleh kosong';
+    if (value?.isEmpty ?? true) return 'Can\'t empty';
     return null;
   }
 
