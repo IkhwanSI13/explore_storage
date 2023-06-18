@@ -1,16 +1,11 @@
 # explore_storage
 
-A new Flutter project.
+Explore all the storage options available for Flutter
 
-## Getting Started
+## Available
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [shared_preferences](https://pub.dev/packages/shared_preferences) for key-value pairs. 
+You can check more explanation on my blog [here](https://www.yukngoding.id/2021/02/27/penyimpanan-data-lokal-pada-flutter-shared_preferences/) 
+- [sqflite](https://pub.dev/packages/sqflite) for table. 
+  - You can check more explanation on my blog [here](https://www.yukngoding.id/2021/03/02/penyimpanan-data-lokal-pada-flutter-sqflite/)
+  - For table, we need to handle the migrations, you can check more explanation on my blog [here](https://www.yukngoding.id/2021/03/06/cara-untuk-melakukan-migration-pada-sqflite/)
