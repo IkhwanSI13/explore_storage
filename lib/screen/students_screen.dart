@@ -17,11 +17,7 @@ class _StudentsScreenState extends State<StudentsScreen> {
   TextEditingController controllerName = TextEditingController();
   TextEditingController controllerDepartment = TextEditingController();
   TextEditingController controllerSks = TextEditingController();
-
-  String id = "";
-  String name = "";
-  String department = "";
-  int sks = 0;
+  TextEditingController controllerAddress = TextEditingController();
 
   List<StudentModel> students = [];
 
@@ -63,27 +59,27 @@ class _StudentsScreenState extends State<StudentsScreen> {
                     controller: controllerId,
                     decoration: const InputDecoration(hintText: "ID"),
                     validator: (value) => _onValidateText(value),
-                    keyboardType: TextInputType.number,
-                    onSaved: (value) => id = value.toString(),
                   ),
                   TextFormField(
                     controller: controllerName,
-                    decoration: const InputDecoration(hintText: "Nama"),
+                    decoration: const InputDecoration(hintText: "Name"),
                     validator: (value) => _onValidateText(value),
-                    onSaved: (value) => name = value.toString(),
                   ),
                   TextFormField(
                     controller: controllerDepartment,
                     decoration: const InputDecoration(hintText: "Department"),
                     validator: (value) => _onValidateText(value),
-                    onSaved: (value) => department = value.toString(),
                   ),
                   TextFormField(
                     controller: controllerSks,
                     decoration: const InputDecoration(hintText: "SKS"),
                     validator: (value) => _onValidateText(value),
                     keyboardType: TextInputType.number,
-                    onSaved: (value) => sks = int.parse(value.toString()),
+                  ),
+                  TextFormField(
+                    controller: controllerAddress,
+                    decoration: const InputDecoration(hintText: "Address"),
+                    validator: (value) => _onValidateText(value),
                   ),
                 ],
               ),
@@ -117,6 +113,7 @@ class _StudentsScreenState extends State<StudentsScreen> {
                       Text("Name: ${value.name}"),
                       Text("Department: ${value.department}"),
                       Text("SKS: ${value.sks}"),
+                      Text("Address: ${value.address ?? "Empty"}"),
                     ],
                   ),
                 );
@@ -137,18 +134,19 @@ class _StudentsScreenState extends State<StudentsScreen> {
     FocusScope.of(context).requestFocus(FocusNode());
 
     if (keyFormStudent.currentState?.validate() ?? false) {
-      keyFormStudent.currentState?.save();
+      await MySQFLite.instance.insertStudent(StudentModel(
+        id: controllerId.text,
+        name: controllerName.text,
+        department: controllerDepartment.text,
+        sks: int.parse(controllerSks.text),
+        address: controllerAddress.text,
+      ));
+
       controllerId.text = "";
       controllerName.text = "";
       controllerDepartment.text = "";
       controllerSks.text = "";
-
-      await MySQFLite.instance.insertStudent(StudentModel(
-        id: id,
-        name: name,
-        department: department,
-        sks: sks,
-      ));
+      controllerAddress.text = "";
 
       students = await MySQFLite.instance.getStudents();
       setState(() {});

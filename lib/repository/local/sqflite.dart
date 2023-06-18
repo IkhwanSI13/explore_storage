@@ -8,7 +8,9 @@ class MySQFLite {
   static const _databaseName = "MyDatabase.db";
 
   static const _databaseV1 = 1;
+  static const _databaseV2 = 2;
   static const tableStudent = 'Student';
+  static const tableOrganization = 'Organization';
 
   // Singleton class
   MySQFLite._privateConstructor();
@@ -27,22 +29,44 @@ class MySQFLite {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, _databaseName);
 
-    return await openDatabase(path, version: _databaseV1,
+    return await openDatabase(path, version: _databaseV2,
         onCreate: (db, version) async {
       var batch = db.batch();
-      _onCreateTableStudent(batch);
-
+      _onCreateTableStudentV2(batch);
+      _onCreateTableOrganizationV2(batch);
+      await batch.commit();
+    }, onUpgrade: (db, oldVersion, newVersion) async {
+      var batch = db.batch();
+      if (oldVersion == _databaseV1) {
+        _onUpdateTableStudentV1ToV2(batch);
+        _onCreateTableOrganizationV2(batch);
+      }
       await batch.commit();
     });
   }
 
-  void _onCreateTableStudent(Batch batch) async {
+  void _onCreateTableStudentV2(Batch batch) async {
     batch.execute('''
           CREATE TABLE $tableStudent (
             ${Constant.studentId} TEXT PRIMARY KEY,
             ${Constant.studentName} TEXT,
             ${Constant.studentDepartment} TEXT,
-            ${Constant.studentSKS} INTEGER
+            ${Constant.studentSKS} INTEGER,
+            ${Constant.studentAddress} TEXT
+          )
+          ''');
+  }
+
+  void _onUpdateTableStudentV1ToV2(Batch batch) async {
+    batch.execute(
+        '''ALTER TABLE $tableStudent ADD COLUMN ${Constant.studentAddress} TEXT''');
+  }
+
+  void _onCreateTableOrganizationV2(Batch batch) async {
+    batch.execute('''
+          CREATE TABLE $tableOrganization (
+            ${Constant.organizationName} TEXT,
+            ${Constant.organizationId} TEXT
           )
           ''');
   }
@@ -83,6 +107,7 @@ class MySQFLite {
         sks: int.parse(
           allData[i][Constant.studentSKS].toString(),
         ),
+        address: allData[i][Constant.studentAddress] as String?,
       );
     });
   }
